@@ -1,4 +1,4 @@
-package defaultPackage;
+package update3;
 
 public class LobbyClass {
 	private String content;
