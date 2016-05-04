@@ -5,3 +5,11 @@ To ask:
 - När man kör submit och refresh, hur ska svaren skickas tillbaka. Två socket?
 
 - När man kör submit, Lobby skickar ett meddelande att det finns en ny version av koden. 
+
+
+Det vi har nu:
+- Chatten fungerar bra!
+- Submit fungerar i lokalt workspace.
+- LobbyClass håller reda på varje klass. 
+  Varje Lobby har en lista med LobbyKlass och lista med folk som är med i just denna Lobby. 
+  LobbyList är en Lista av Lobby som server har koll på. 
