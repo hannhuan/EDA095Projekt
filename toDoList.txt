@@ -1,2 +1,7 @@
-To do:
-- Fixa Chatten som funkar i GUI
+To ask:
+
+- Server ska ha en LobbyList. Fråga handledar om vi är på rätt spår. 
+
+- När man kör submit och refresh, hur ska svaren skickas tillbaka. Två socket?
+
+- När man kör submit, Lobby skickar ett meddelande att det finns en ny version av koden. 
