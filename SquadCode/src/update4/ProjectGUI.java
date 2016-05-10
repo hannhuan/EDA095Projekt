@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -233,8 +234,11 @@ public class ProjectGUI {
 	}
 
 	/** Adds a line to the chatArea */
-	public void chat(String line) {
-		chatArea.append(line + "\n");
+	public void chat(Doc doc) {
+		//chatArea.append(doc + "\n");
+		try {
+			chatArea.append(doc.getTitle() +": " + new String(doc.getContent(), "UTF-8") + "\n");
+		} catch (UnsupportedEncodingException e) {}
 	}
 
 	/** Fills the projectList with all the classes in from this lobby */

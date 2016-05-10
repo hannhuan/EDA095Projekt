@@ -3,6 +3,7 @@ package update4;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -31,11 +32,13 @@ public class ClientP {
 		PrintWriter out = new PrintWriter(clientsocket.getOutputStream(), true);
 		ObjectOutputStream oos = new ObjectOutputStream(clientsocket.getOutputStream());
 		
-		InputStream in = clientsocket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(clientsocket.getInputStream());
 		
-		StartGUI start = new StartGUI(clientsocket, oos);
-		
-		ServerListenerP listener = new ServerListenerP(in, start);
+		//StartGUI start = new StartGUI(clientsocket, oos);
+		HashMap<String, String> hej = new HashMap<String, String>();
+		hej.put("turtle", "turtle kod som per gillar");
+		ProjectGUI proj = new ProjectGUI(oos,"kalle anka", hej);
+		ServerListenerP listener = new ServerListenerP(ois, proj);
 		listener.start();
 	}
 }

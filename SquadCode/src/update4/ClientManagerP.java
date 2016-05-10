@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Util.Paket;
+
 public class ClientManagerP {
 	private List<ChatThreadP> clients;
 	private LobbyList lobbylist;
@@ -38,9 +40,9 @@ public class ClientManagerP {
 		return lobbylist.getLobby(lobbyName);
 	}
 
-	public void sendToAll(String line) {
+	public void sendToAll(Paket pac) {
 		for (ChatThreadP thread : clients) {
-			thread.send(line);
+			thread.send(pac);
 		}
 	}
 	
