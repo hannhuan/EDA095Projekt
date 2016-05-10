@@ -5,18 +5,18 @@ import java.io.Serializable;
 public class Paket implements Serializable {
 	
 	private String type;
-	private byte[] contentB;
+	private Doc doc;
 	
-	public Paket(String type, byte[] contentB ){
+	public Paket(String type, Doc doc ){
 		this.type = type;
-		this.contentB = contentB;		
+		this.doc = doc;		
 	}
 	
 	public String getType(){
 		return type;
 	}
 	
-	public byte[] getContent(){
-		return contentB;
+	public Doc getDoc(){
+		return doc;
 	}
 }

@@ -34,6 +34,10 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.text.DefaultCaret;
+
+import Util.Doc;
+import Util.Paket;
+
 import javax.swing.JList;
 
 import java.awt.Component;
@@ -47,6 +51,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -58,7 +63,7 @@ import javax.swing.JTextPane;
 import javax.swing.JTextField;
 
 public class ProjectGUI {
-	private PrintWriter out;
+	private ObjectOutputStream oos;
 	private String username;
 	private Map<String, String> classes;
 	private JFrame frame;
@@ -79,17 +84,17 @@ public class ProjectGUI {
 	private JScrollPane chatScroll;
 	private DefaultCaret caret;
 	private JButton btnRemoveClass;
-	
-	/**CONSTRUCTOR: Creates the ProjectGUI*/
-	public ProjectGUI(PrintWriter out, String username, HashMap<String, String> classes) throws IOException {
-		this.out = out;
+
+	/** CONSTRUCTOR: Creates the ProjectGUI */
+	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, String> classes) throws IOException {
+		this.oos = oos;
 		this.username = username;
 		this.classes = classes;
-		
+
 		frame = new JFrame();
 		frame.setBounds(0, 0, 900, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		mainPanel = new JPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		layout = new SpringLayout();
@@ -105,7 +110,7 @@ public class ProjectGUI {
 		menuPanel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
 		menuPanel.setBackground(new Color(192, 192, 192));
 		mainPanel.add(menuPanel);
-		
+
 		btnRefresh = new JButton("REFRESH");
 		btnRefresh.setBackground(new Color(135, 206, 235));
 		layout.putConstraint(SpringLayout.NORTH, btnRefresh, 10, SpringLayout.NORTH, mainPanel);
@@ -114,7 +119,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.WEST, btnRefresh, 319, SpringLayout.EAST, btnRefresh);
 		btnRefresh.addActionListener(new RefreshListner(this));
 		menuPanel.add(btnRefresh);
-		
+
 		btnSubmit = new JButton("SUBMIT");
 		layout.putConstraint(SpringLayout.NORTH, btnSubmit, 10, SpringLayout.NORTH, mainPanel);
 		layout.putConstraint(SpringLayout.WEST, btnSubmit, 131, SpringLayout.WEST, mainPanel);
@@ -131,7 +136,7 @@ public class ProjectGUI {
 		btnFormat.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
 		btnFormat.addActionListener(new FormatListner(this));
 		menuPanel.add(btnFormat);
-		
+
 		btnNewClass = new JButton("NEW CLASS");
 		layout.putConstraint(SpringLayout.NORTH, btnNewClass, 11, SpringLayout.SOUTH, menuPanel);
 		layout.putConstraint(SpringLayout.WEST, btnNewClass, 10, SpringLayout.WEST, mainPanel);
@@ -139,7 +144,7 @@ public class ProjectGUI {
 		btnNewClass.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		btnNewClass.setBackground(new Color(255, 255, 255));
 		btnNewClass.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		btnNewClass.addActionListener(new NewClassListener(out, classes));
+		btnNewClass.addActionListener(new NewClassListener(oos, classes));
 		mainPanel.add(btnNewClass);
 
 		listModel = new DefaultListModel<String>();
@@ -151,23 +156,23 @@ public class ProjectGUI {
 		projectList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		projectList.addListSelectionListener(new SelectListener(this, classes));
 		mainPanel.add(projectList);
-		
+
 		codeArea = new JTextArea();
 		codeArea.setTabSize(6);
 		codeArea.setEditable(true);
 		codeArea.setFont(new Font("Courier New", Font.PLAIN, 21));
 		codeArea.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 
-	    codeScroll = new JScrollPane(codeArea);
-	    layout.putConstraint(SpringLayout.EAST, btnNewClass, -6, SpringLayout.WEST, codeScroll);
-	    layout.putConstraint(SpringLayout.NORTH, codeScroll, 121, SpringLayout.NORTH, mainPanel);
-	    layout.putConstraint(SpringLayout.WEST, codeScroll, 306, SpringLayout.WEST, mainPanel);
-		layout.putConstraint(SpringLayout.SOUTH, codeScroll, -10, SpringLayout.SOUTH, mainPanel);		
-	    codeScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-	    codeScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-	    mainPanel.add(codeScroll);
-	    codeScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+		codeScroll = new JScrollPane(codeArea);
+		layout.putConstraint(SpringLayout.EAST, btnNewClass, -6, SpringLayout.WEST, codeScroll);
+		layout.putConstraint(SpringLayout.NORTH, codeScroll, 121, SpringLayout.NORTH, mainPanel);
+		layout.putConstraint(SpringLayout.WEST, codeScroll, 306, SpringLayout.WEST, mainPanel);
+		layout.putConstraint(SpringLayout.SOUTH, codeScroll, -10, SpringLayout.SOUTH, mainPanel);
+		codeScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		codeScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		mainPanel.add(codeScroll);
+		codeScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
 		writeMessage = new JTextField();
 		layout.putConstraint(SpringLayout.EAST, codeScroll, -6, SpringLayout.WEST, writeMessage);
 		layout.putConstraint(SpringLayout.WEST, writeMessage, -298, SpringLayout.EAST, mainPanel);
@@ -178,7 +183,7 @@ public class ProjectGUI {
 		writeMessage.setFont(new Font("Calibri", Font.PLAIN, 20));
 		writeMessage.addActionListener(new SendChatListener(this));
 		mainPanel.add(writeMessage);
-		
+
 		chatArea = new JTextArea();
 		chatArea.setEditable(false);
 		chatArea.setLineWrap(true);
@@ -192,13 +197,13 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.EAST, chatScroll, 0, SpringLayout.EAST, menuPanel);
 		chatScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		chatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		caret = (DefaultCaret)chatArea.getCaret();
+		caret = (DefaultCaret) chatArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		mainPanel.add(chatScroll);
-		
+
 		JPanel panel = new JPanel();
 		mainPanel.add(panel);
-		
+
 		btnRemoveClass = new JButton("REMOVE CLASS");
 		layout.putConstraint(SpringLayout.SOUTH, projectList, -6, SpringLayout.NORTH, btnRemoveClass);
 		layout.putConstraint(SpringLayout.WEST, btnRemoveClass, 0, SpringLayout.WEST, menuPanel);
@@ -207,69 +212,72 @@ public class ProjectGUI {
 		btnRemoveClass.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		btnRemoveClass.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		btnRemoveClass.setBackground(Color.WHITE);
-		btnRemoveClass.addActionListener(new RemoveClassListener(this, out));
+		btnRemoveClass.addActionListener(new RemoveClassListener(this, oos));
 		mainPanel.add(btnRemoveClass);
-		
+
 		fillList();
 		frame.setVisible(true);
 	}
 
-	
-	
-	/**Fills the CodeArea with the specific text codeText*/
+	/** Fills the CodeArea with the specific text codeText */
 	public void setCodeText(String codeText) {
 		codeArea.setText(codeText);
 	}
-	
-	/**Edits the CodeArea*/
+
+	/** Edits the CodeArea */
 	public void editCode() {
-	
+
 		String newCode = codeArea.getText();
 		classes.put(projectList.getSelectedValue().toString(), newCode);
-		codeArea.setText(newCode);		
+		codeArea.setText(newCode);
 	}
-	
-	/**Adds a line to the chatArea*/
-	public void chat(String line){
+
+	/** Adds a line to the chatArea */
+	public void chat(String line) {
 		chatArea.append(line + "\n");
 	}
-	
-	/**Fills the projectList with all the classes in from this lobby*/
-	public void fillList(){
+
+	/** Fills the projectList with all the classes in from this lobby */
+	public void fillList() {
 		listModel.clear();
-		for (String classTitle : classes.keySet()){
+		for (String classTitle : classes.keySet()) {
 			listModel.addElement(classTitle);
 		}
 	}
 
-	/**Sends a chatMessage*/
+	/** Sends a chatMessage */
 	public void sendChat() {
-		out.println("@" + username + ": " + writeMessage.getText());
-		writeMessage.setText("");		
+		// out.println("@" + username + ": " + writeMessage.getText());
+		// writeMessage.setText("");
+		try {
+			oos.writeObject(new Paket("chat", new Doc(username, writeMessage.getText().getBytes())));
+			writeMessage.setText("");
+		} catch (Exception e) {
+		}
 	}
-	
-	/**@return the selected class from the projectList*/
-	public String getSelectedClass(){
+
+	/** @return the selected class from the projectList */
+	public String getSelectedClass() {
 		return projectList.getSelectedValue();
 	}
-	
-	/**@return the text in the codeArea*/
-	public String getCodeText(){
-		if(codeArea.getText() == null){
+
+	/** @return the text in the codeArea */
+	public String getCodeText() {
+		if (codeArea.getText() == null) {
 			return "";
 		}
 		return codeArea.getText();
 	}
 
-	/**Adds a new class to the projectList*/
+	/** Adds a new class to the projectList */
 	public void addNewClass(String classTitle) {
 		classes.put(classTitle, "");
-		listModel.addElement(classTitle);	
+		listModel.addElement(classTitle);
 	}
 
-	/**Removes the selected class from the projectList*/
+	/** Removes the selected class from the projectList */
 	public void removeClass(String classTitle) {
 		classes.remove(classTitle);
-		listModel.removeElement(classTitle);	
+		listModel.removeElement(classTitle);
 	}
 }

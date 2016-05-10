@@ -47,6 +47,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ import java.awt.Label;
 import java.awt.Button;
 
 public class StartGUI {
-	private PrintWriter out;
+	private ObjectOutputStream oos;
 	private String username;
 	private HashMap<String, String> classes;
 	private JFrame frame;
@@ -83,8 +84,8 @@ public class StartGUI {
 //	private List<ProjectGUI> guis;
 	private ProjectGUI gui;
 
-	public StartGUI(Socket clientsocket, PrintWriter out) {
-		this.out = out;
+	public StartGUI(Socket clientsocket, ObjectOutputStream oos) {
+		this.oos = oos;
 		this.clientsocket = clientsocket;
 		classes = new HashMap<String, String>();
 		//guis = new ArrayList<ProjectGUI>();
@@ -160,7 +161,7 @@ public class StartGUI {
 		layout.putConstraint(SpringLayout.WEST, btnLogin, 554, SpringLayout.WEST, mainPanel);
 		layout.putConstraint(SpringLayout.EAST, btnLogin, -63, SpringLayout.EAST, mainPanel);
 		btnLogin.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 21));
-		btnLogin.addActionListener(new LoginListner(this, out));
+		btnLogin.addActionListener(new LoginListner(this, oos));
 		mainPanel.add(btnLogin);
 
 		btnStart = new Button("Start");
@@ -171,7 +172,7 @@ public class StartGUI {
 		layout.putConstraint(SpringLayout.EAST, btnStart, 0, SpringLayout.EAST, menuPanel);
 		btnStart.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 21));
 		btnStart.setBackground(new Color(240, 255, 240));
-		btnStart.addActionListener(new StartListner(this, out));
+		btnStart.addActionListener(new StartListner(this, oos));
 		mainPanel.add(btnStart);
 
 		btnStartnew = new Button("Start with new a new lobby");
@@ -181,7 +182,7 @@ public class StartGUI {
 		layout.putConstraint(SpringLayout.EAST, btnStartnew, -20, SpringLayout.WEST, btnStart);
 		btnStartnew.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 21));
 		btnStartnew.setBackground(new Color(240, 255, 255));
-		btnStartnew.addActionListener(new StartListner(this, out));
+		btnStartnew.addActionListener(new StartListner(this, oos));
 		mainPanel.add(btnStartnew);
 
 		btnHelp = new Button("Help");
@@ -217,7 +218,7 @@ public class StartGUI {
 	public void setProject() {
 		username = usernameTextfield.getText();
 		try {
-			gui = new ProjectGUI(out, username, classes);
+			gui = new ProjectGUI(oos, username, classes);
 			frame.setVisible(false);
 		} catch (IOException e) {}
 	}

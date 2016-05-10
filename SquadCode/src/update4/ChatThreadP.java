@@ -48,7 +48,6 @@ public class ChatThreadP extends Thread {
 					String lobbyName = line.substring(2);
 					HashMap<String, String> currentLobby = manager.getLobby(lobbyName);
 					for(String classname : currentLobby.keySet()){
-						System.out.println("$1"+classname + "%" + currentLobby.get(classname));
 						out.println("$1"+classname + "%" + currentLobby.get(classname));
 						out.flush();
 					}

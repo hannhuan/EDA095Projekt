@@ -3,6 +3,7 @@ package update4;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -28,9 +29,11 @@ public class ClientP {
 		Socket clientsocket = new Socket(args[0], Integer.parseInt(args[1]));
 		
 		PrintWriter out = new PrintWriter(clientsocket.getOutputStream(), true);
+		ObjectOutputStream oos = new ObjectOutputStream(clientsocket.getOutputStream());
+		
 		InputStream in = clientsocket.getInputStream();
 		
-		StartGUI start = new StartGUI(clientsocket, out);
+		StartGUI start = new StartGUI(clientsocket, oos);
 		
 		ServerListenerP listener = new ServerListenerP(in, start);
 		listener.start();
