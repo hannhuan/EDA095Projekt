@@ -1,10 +1,10 @@
-To ask:
+To do:
 
-- Server ska ha en LobbyList. Fråga handledar om vi är på rätt spår. 
-
-- När man kör submit och refresh, hur ska svaren skickas tillbaka. Två socket?
-
-- När man kör submit, Lobby skickar ett meddelande att det finns en ny version av koden. 
+- Merge gui och funktionen.
+- Inloggningsystem
+- Save och read.
+- Lägg till ett dokumentlager för contents. 
+- Hämta/Push. Informera alla användare när något nytt kommer. 
 
 
 Det vi har nu:
