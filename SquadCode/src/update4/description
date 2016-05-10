@@ -5,6 +5,6 @@
 		$1	en del av en lobby, en klass ed klassnamn
 		$*	lobbyns alla klasser är färigskickade och kan nu sstartas
 		%	är innehållet på själva koden kodtexten
-		§-	tar bort efterföljande klass
-		§+	lägger till efterföljande klass
+		�-/newclass		tar bort efterföljande klass
+		�+	lägger till efterföljande klass
 	

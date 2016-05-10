@@ -66,7 +66,7 @@ import javax.swing.JTextField;
 public class ProjectGUI {
 	private ObjectOutputStream oos;
 	private String username;
-	private Map<String, String> classes;
+	private Map<String, Doc> classes;
 	private JFrame frame;
 	private FlowLayout flowLayout;
 	private SpringLayout layout;
@@ -87,7 +87,7 @@ public class ProjectGUI {
 	private JButton btnRemoveClass;
 
 	/** CONSTRUCTOR: Creates the ProjectGUI */
-	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, String> classes) throws IOException {
+	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, Doc> classes) throws IOException {
 		this.oos = oos;
 		this.username = username;
 		this.classes = classes;
@@ -126,7 +126,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.WEST, btnSubmit, 131, SpringLayout.WEST, mainPanel);
 		btnSubmit.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
 		btnSubmit.setBackground(new Color(144, 238, 144));
-		btnSubmit.addActionListener(new SubmitListner(this));
+		btnSubmit.addActionListener(new SubmitListner(this, oos));
 		menuPanel.add(btnSubmit);
 
 		btnFormat = new JButton("FORMAT");
@@ -227,15 +227,14 @@ public class ProjectGUI {
 
 	/** Edits the CodeArea */
 	public void editCode() {
-
 		String newCode = codeArea.getText();
-		classes.put(projectList.getSelectedValue().toString(), newCode);
+		String title = projectList.getSelectedValue().toString();
+		classes.put(title, new Doc(title, newCode.getBytes()));
 		codeArea.setText(newCode);
 	}
 
 	/** Adds a line to the chatArea */
 	public void chat(Doc doc) {
-		//chatArea.append(doc + "\n");
 		try {
 			chatArea.append(doc.getTitle() +": " + new String(doc.getContent(), "UTF-8") + "\n");
 		} catch (UnsupportedEncodingException e) {}
@@ -274,14 +273,18 @@ public class ProjectGUI {
 	}
 
 	/** Adds a new class to the projectList */
-	public void addNewClass(String classTitle) {
-		classes.put(classTitle, "");
-		listModel.addElement(classTitle);
+	public void addNewClass(Doc doc) {
+		classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
+		listModel.addElement(doc.getTitle());
 	}
 
 	/** Removes the selected class from the projectList */
-	public void removeClass(String classTitle) {
-		classes.remove(classTitle);
-		listModel.removeElement(classTitle);
+	public void removeClass(Doc doc) {
+		classes.remove(doc.getTitle());
+		listModel.removeElement(doc.getTitle());
+	}
+
+	public void receiveDoc(Doc doc) {
+		classes.get(doc.getTitle()).setnewContent(doc.getContent());
 	}
 }

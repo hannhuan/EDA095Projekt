@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import Util.Doc;
+
 public class ClientP {
 	private static ProjectGUI gui;
 
@@ -35,8 +37,8 @@ public class ClientP {
 		ObjectInputStream ois = new ObjectInputStream(clientsocket.getInputStream());
 		
 		//StartGUI start = new StartGUI(clientsocket, oos);
-		HashMap<String, String> hej = new HashMap<String, String>();
-		hej.put("turtle", "turtle kod som per gillar");
+		HashMap<String, Doc> hej = new HashMap<String, Doc>();
+		hej.put("turtle", new Doc("turtle", "turtle kod som per gillar".getBytes()));
 		ProjectGUI proj = new ProjectGUI(oos,"kalle anka", hej);
 		ServerListenerP listener = new ServerListenerP(ois, proj);
 		listener.start();

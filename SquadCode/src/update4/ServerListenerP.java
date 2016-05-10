@@ -38,10 +38,12 @@ public class ServerListenerP extends Thread {
 //						}
 						if(type.equals("chat")){
 							start.chat(pac.getDoc());
-						}else if(type.startsWith("§+")){
-							start.addNewClass(type.substring(2));
-						}else if(type.startsWith("§-")){
-							start.removeClass(type.substring(2));
+						}else if(type.equals("newclass")){
+							start.addNewClass(pac.getDoc());
+						}else if(type.startsWith("removeclass")){
+							start.removeClass(pac.getDoc());
+						}else if (type.equals("submit")){
+							start.receiveDoc(pac.getDoc());
 						}
 				}
 			} catch (Exception e) {

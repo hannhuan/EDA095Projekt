@@ -58,7 +58,8 @@ public class ChatThreadP extends Thread {
 //						out.println("?"+lobbyname);
 //						out.flush();
 //					}
-//				}else if(line.startsWith("$*")){
+//				}
+//			else if(line.startsWith("$*")){
 //					String lobbyName = line.substring(2);
 //					HashMap<String, String> currentLobby = manager.getLobby(lobbyName);
 //					for(String classname : currentLobby.keySet()){
@@ -66,11 +67,15 @@ public class ChatThreadP extends Thread {
 //						out.flush();
 //					}
 //					out.println("$*");
-//				}else if(line.startsWith("§+")){
-//					manager.sendToAll(line);
-//				}else if(line.startsWith("§-")){
-//					manager.sendToAll(line);
 //				}
+				else if(type.equals("submit")){
+					System.out.println("SUBMIT GÖRS!");
+					manager.sendToAll(pac);
+				}else if(type.equals("newclass")){
+					manager.sendToAll(pac);
+				}else if(type.equals("removeclass")){
+					manager.sendToAll(pac);
+				}
 			}
 		} catch (Exception e2) {
 			try {
@@ -79,15 +84,11 @@ public class ChatThreadP extends Thread {
 				socketclient.close();
 				e2.printStackTrace();
 			} catch (IOException e1) {
-				e1.printStackTrace();
 			}
 		}
 	}
 	
 	public void send(Paket pac) {
-//		out.println(line);
-//		out.flush();
-		
 		try {
 			oos.writeObject(pac);
 		} catch (IOException e) {}
