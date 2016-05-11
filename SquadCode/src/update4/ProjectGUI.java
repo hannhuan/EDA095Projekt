@@ -236,13 +236,17 @@ public class ProjectGUI {
 	/** Adds a line to the chatArea */
 	public void chat(Doc doc) {
 		try {
-			chatArea.append(doc.getTitle() +": " + new String(doc.getContent(), "UTF-8") + "\n");
-		} catch (UnsupportedEncodingException e) {}
+			chatArea.append(doc.getTitle() + ": " + new String(doc.getContent(), "UTF-8") + "\n");
+		} catch (UnsupportedEncodingException e) {
+		}
 	}
 
 	/** Fills the projectList with all the classes in from this lobby */
 	public void fillList() {
-		listModel.clear();
+		try {
+			listModel.clear();
+		} catch (NullPointerException e) {
+		}
 		for (String classTitle : classes.keySet()) {
 			listModel.addElement(classTitle);
 		}
@@ -259,12 +263,16 @@ public class ProjectGUI {
 		}
 	}
 
-	/** @return the selected class from the projectList */
+	/**
+	 * @return the selected class from the projectList
+	 */
 	public String getSelectedClass() {
 		return projectList.getSelectedValue();
 	}
 
-	/** @return the text in the codeArea */
+	/**
+	 * @return the text in the codeArea
+	 */
 	public String getCodeText() {
 		if (codeArea.getText() == null) {
 			return "";
@@ -281,7 +289,9 @@ public class ProjectGUI {
 	/** Removes the selected class from the projectList */
 	public void removeClass(Doc doc) {
 		classes.remove(doc.getTitle());
-		listModel.removeElement(doc.getTitle());
+		fillList();
+	
+
 	}
 
 	public void receiveDoc(Doc doc) {
