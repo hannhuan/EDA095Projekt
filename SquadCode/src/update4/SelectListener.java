@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionListener;
 
 import Util.Doc;
 
-
 public class SelectListener implements ListSelectionListener {
 	private ProjectGUI gui;
 	private HashMap<String, Doc> classes;
@@ -19,13 +18,19 @@ public class SelectListener implements ListSelectionListener {
 	}
 
 	@Override
-		public void valueChanged(ListSelectionEvent arg0) {
-        if (!arg0.getValueIsAdjusting()) {
-        	try {
-				String newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
+	public void valueChanged(ListSelectionEvent arg0) {
+		if (!arg0.getValueIsAdjusting()) {
+			try {
+				String newcode = "";
+				if (!gui.getIndexZero()) {
+					newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
+					gui.setIndexZeroFalse();
+				}
 				gui.setCodeText(newcode);
-			} catch (UnsupportedEncodingException e) {}
-        }
-    }
+				
+			} catch (Exception e) {
+			}
+		}
+	}
 
 }
