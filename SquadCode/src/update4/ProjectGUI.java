@@ -280,8 +280,6 @@ public class ProjectGUI {
 	public void receiveDoc(Doc doc) {
 		classes.get(doc.getTitle()).setnewContent(doc.getContent());
 	}
-<<<<<<< HEAD
-	
 	public void refreshDoc(){
 		String classTitle = getSelectedClass();
 		classes.get(classTitle).refresh();
@@ -303,6 +301,4 @@ public class ProjectGUI {
 		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
 		classes.get(getSelectedClass()).refresh();		
 	}
-=======
->>>>>>> origin/master
 }
