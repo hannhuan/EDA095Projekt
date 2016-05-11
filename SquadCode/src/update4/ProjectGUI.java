@@ -301,12 +301,26 @@ public class ProjectGUI {
 	public void receiveDoc(Doc doc) {
 		classes.get(doc.getTitle()).setnewContent(doc.getContent());
 	}
-
-	public boolean getIndexZero() {
-		return indexZero;
+	
+	public void refreshDoc(){
+		String classTitle = getSelectedClass();
+		classes.get(classTitle).refresh();
+		
+		try {
+			//System.out.println(new String(classes.get(classTitle).getContent(), "UTF-8"));
+			setCodeText(new String(classes.get(classTitle).getContent(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	public void setIndexZeroFalse (){
-		indexZero = false;
+	public boolean allowedToSubmit(){
+		return classes.get(getSelectedClass()).ifNewest();
+	}
+	
+	public void saveSubmit(){
+		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
+		classes.get(getSelectedClass()).refresh();		
 	}
 }

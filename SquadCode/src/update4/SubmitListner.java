@@ -22,9 +22,17 @@ public class SubmitListner implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			oos.writeObject(new Paket("submit", new Doc(gui.getSelectedClass(), gui.getCodeText().getBytes())));
+			gui.saveSubmit();
+			
+			if(gui.allowedToSubmit()){
+				oos.writeObject(new Paket("submit", new Doc(gui.getSelectedClass(), gui.getCodeText().getBytes())));
+			} else {
+				gui.chat(new Doc("/SYSTEM", ": Cant submit while having received code!".getBytes()));
+			}
+			
 		} catch (IOException e1) {}
-		//gui.editCode();
+		//System.out.println("222222222222222222222");
+		//gui.refreshDoc();
 	}
 
 }

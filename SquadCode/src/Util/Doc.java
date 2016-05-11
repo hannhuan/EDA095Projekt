@@ -26,14 +26,12 @@ public class Doc implements Serializable{
 			return newest;
 		}
 		
-		public void setnewContent(byte[] newContent){
-			this.newContent = newContent;
-			this.newest = false;
-			try {
-				System.out.println("VI HAR LAGT TILL NYTT!" + new String(newContent, "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		public void setnewContent(byte[] newContent){	
+			if(!(content == newContent)){
+				this.newContent = newContent;
+				this.newest = false;
+			} else {
+			System.out.println("senaste kod");
 			}
 		}
 		
