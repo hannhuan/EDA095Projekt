@@ -85,9 +85,11 @@ public class ProjectGUI {
 	private JScrollPane chatScroll;
 	private DefaultCaret caret;
 	private JButton btnRemoveClass;
+	private Boolean indexZero;
 
 	/** CONSTRUCTOR: Creates the ProjectGUI */
 	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, Doc> classes) throws IOException {
+		this.indexZero = false;
 		this.oos = oos;
 		this.username = username;
 		this.classes = classes;
@@ -246,7 +248,8 @@ public class ProjectGUI {
 		
 		try {
 			listModel.clear();
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
+
 		}
 		for (String classTitle : classes.keySet()) {
 			listModel.addElement(classTitle);
@@ -297,5 +300,13 @@ public class ProjectGUI {
 
 	public void receiveDoc(Doc doc) {
 		classes.get(doc.getTitle()).setnewContent(doc.getContent());
+	}
+
+	public boolean getIndexZero() {
+		return indexZero;
+	}
+	
+	public void setIndexZeroFalse (){
+		indexZero = false;
 	}
 }
