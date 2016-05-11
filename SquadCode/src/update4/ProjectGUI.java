@@ -4,13 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.ScrollPane;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLayeredPane;
@@ -25,25 +22,18 @@ import javax.swing.JToolBar;
 import javax.swing.JFormattedTextField;
 import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
-
 import java.awt.Font;
-
 import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.text.DefaultCaret;
-
 import Util.Doc;
 import Util.Paket;
-
 import javax.swing.JList;
-
 import java.awt.Component;
-
 import javax.swing.Box;
-
 import java.awt.FlowLayout;
 import java.awt.TextField;
 import java.awt.TextArea;
@@ -59,7 +49,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JTextPane;
 import javax.swing.JTextField;
 
@@ -85,11 +74,9 @@ public class ProjectGUI {
 	private JScrollPane chatScroll;
 	private DefaultCaret caret;
 	private JButton btnRemoveClass;
-	private Boolean indexZero;
 
 	/** CONSTRUCTOR: Creates the ProjectGUI */
 	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, Doc> classes) throws IOException {
-		this.indexZero = false;
 		this.oos = oos;
 		this.username = username;
 		this.classes = classes;
@@ -239,28 +226,19 @@ public class ProjectGUI {
 	public void chat(Doc doc) {
 		try {
 			chatArea.append(doc.getTitle() + ": " + new String(doc.getContent(), "UTF-8") + "\n");
-		} catch (UnsupportedEncodingException e) {
-		}
+		} catch (UnsupportedEncodingException e) {}
 	}
 
 	/** Fills the projectList with all the classes in from this lobby */
 	public void fillList() {
-		
-		try {
-			listModel.clear();
-		} catch (Exception e) {
-
-		}
+		listModel.clear();
 		for (String classTitle : classes.keySet()) {
 			listModel.addElement(classTitle);
-			System.out.println("Filled list");
 		}
 	}
 
 	/** Sends a chatMessage */
 	public void sendChat() {
-		// out.println("@" + username + ": " + writeMessage.getText());
-		// writeMessage.setText("");
 		try {
 			oos.writeObject(new Paket("chat", new Doc(username, writeMessage.getText().getBytes())));
 			writeMessage.setText("");
@@ -298,9 +276,11 @@ public class ProjectGUI {
 		fillList();
 	}
 
+	/**receives the Document doc from Server*/
 	public void receiveDoc(Doc doc) {
 		classes.get(doc.getTitle()).setnewContent(doc.getContent());
 	}
+<<<<<<< HEAD
 	
 	public void refreshDoc(){
 		String classTitle = getSelectedClass();
@@ -323,4 +303,6 @@ public class ProjectGUI {
 		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
 		classes.get(getSelectedClass()).refresh();		
 	}
+=======
+>>>>>>> origin/master
 }
