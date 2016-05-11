@@ -22,6 +22,7 @@ public class RemoveClassListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String classTitle = gui.getSelectedClass();
+		System.out.println("Rensar fönster");
 		//oos.println("§-" + classTitle);
 		try {
 			oos.writeObject(new Paket("removeclass", new Doc(classTitle, "".getBytes())));

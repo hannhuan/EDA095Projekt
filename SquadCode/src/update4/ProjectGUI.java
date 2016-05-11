@@ -190,7 +190,7 @@ public class ProjectGUI {
 		chatArea.setLineWrap(true);
 		chatArea.setFont(new Font("Calibri", Font.PLAIN, 20));
 		chatArea.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-
+		
 		chatScroll = new JScrollPane(chatArea);
 		layout.putConstraint(SpringLayout.NORTH, chatScroll, 11, SpringLayout.SOUTH, menuPanel);
 		layout.putConstraint(SpringLayout.WEST, chatScroll, -290, SpringLayout.EAST, menuPanel);
@@ -243,12 +243,14 @@ public class ProjectGUI {
 
 	/** Fills the projectList with all the classes in from this lobby */
 	public void fillList() {
+		
 		try {
 			listModel.clear();
 		} catch (NullPointerException e) {
 		}
 		for (String classTitle : classes.keySet()) {
 			listModel.addElement(classTitle);
+			System.out.println("Filled list");
 		}
 	}
 
@@ -289,9 +291,8 @@ public class ProjectGUI {
 	/** Removes the selected class from the projectList */
 	public void removeClass(Doc doc) {
 		classes.remove(doc.getTitle());
+		setCodeText("");
 		fillList();
-	
-
 	}
 
 	public void receiveDoc(Doc doc) {

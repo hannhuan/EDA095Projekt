@@ -29,7 +29,7 @@ public class ClientP {
 	/**Starts the ClientSocket! Creates an output and input that will be connected to the server
 	 * also start the first StartGUI where the user login and creates a ServerListener */
 	public static void main(String[] args) throws IOException, UnknownHostException {
-		Socket clientsocket = new Socket(args[0], Integer.parseInt(args[1]));
+		Socket clientsocket = new Socket("127.0.0.1", 30000);
 		
 		PrintWriter out = new PrintWriter(clientsocket.getOutputStream(), true);
 		ObjectOutputStream oos = new ObjectOutputStream(clientsocket.getOutputStream());

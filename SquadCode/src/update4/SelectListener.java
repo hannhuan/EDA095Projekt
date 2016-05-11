@@ -21,11 +21,12 @@ public class SelectListener implements ListSelectionListener {
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (!arg0.getValueIsAdjusting()) {
 			try {
-				String newcode = "";
-				if (!gui.getIndexZero()) {
-					newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
-					gui.setIndexZeroFalse();
-				}
+				//String newcode = "";
+//				if (!gui.getIndexZero()) {
+//					newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
+//					gui.setIndexZeroFalse();
+//				}
+				String newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
 				gui.setCodeText(newcode);
 				
 			} catch (Exception e) {
