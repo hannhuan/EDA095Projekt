@@ -2,6 +2,7 @@ package Util;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class Doc implements Serializable{
 		private String title;
@@ -27,9 +28,10 @@ public class Doc implements Serializable{
 		}
 		
 		public void setnewContent(byte[] newContent){	
-			if(!(content == newContent)){
+			if(!(Arrays.equals(content, newContent))){
 				this.newContent = newContent;
 				this.newest = false;
+				System.out.println("Fick ny kod!");
 			} else {
 			System.out.println("senaste kod");
 			}

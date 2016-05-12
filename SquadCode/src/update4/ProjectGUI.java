@@ -265,8 +265,12 @@ public class ProjectGUI {
 
 	/** Adds a new class to the projectList */
 	public void addNewClass(Doc doc) {
-		classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
-		listModel.addElement(doc.getTitle());
+		if(classes.containsKey(doc.getTitle())){
+			classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
+			listModel.addElement(doc.getTitle());
+		} else {
+		chat(new Doc("/SYSTEM", ": Class already exists".getBytes()));
+		}
 	}
 
 	/** Removes the selected class from the projectList */
@@ -298,7 +302,9 @@ public class ProjectGUI {
 	}
 	
 	public void saveSubmit(){
+		if(allowedToSubmit()){
 		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
 		classes.get(getSelectedClass()).refresh();		
+		}
 	}
 }
