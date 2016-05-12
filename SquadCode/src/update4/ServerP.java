@@ -16,9 +16,9 @@ import java.util.List;
 public class ServerP {
 
 	public static void main(String[] args) throws IOException {
-		int port = 30000;
-		ServerSocket serversocket = new ServerSocket(port);
-		System.out.println("Socket Up: " + port);
+		//int port = 30000;
+		ServerSocket serversocket = new ServerSocket(Integer.parseInt(args[0]));
+		System.out.println("Socket Up: " + args[0]);
 		LobbyList lobbylist = new LobbyList();
 		ClientManagerP manager = new ClientManagerP(lobbylist);
 
