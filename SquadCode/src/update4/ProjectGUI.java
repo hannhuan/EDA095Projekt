@@ -265,7 +265,7 @@ public class ProjectGUI {
 
 	/** Adds a new class to the projectList */
 	public void addNewClass(Doc doc) {
-		if(classes.containsKey(doc.getTitle())){
+		if(!(classes.containsKey(doc.getTitle()))){
 			classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
 			listModel.addElement(doc.getTitle());
 		} else {
