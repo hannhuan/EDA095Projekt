@@ -207,6 +207,8 @@ public class ProjectGUI {
 
 		fillList();
 		frame.setVisible(true);
+	
+		serverSendChat();
 	}
 
 	/** Fills the CodeArea with the specific text codeText */
@@ -245,6 +247,14 @@ public class ProjectGUI {
 		} catch (Exception e) {
 		}
 	}
+	
+	public void serverSendChat(){
+		try {
+			oos.writeObject(new Paket("chat", new Doc("/SERVER", (" User " + username + " connected").getBytes())));
+			writeMessage.setText("");
+		} catch (Exception e) {
+		}
+	}
 
 	/**
 	 * @return the selected class from the projectList
@@ -268,6 +278,7 @@ public class ProjectGUI {
 		if(!(classes.containsKey(doc.getTitle()))){
 			classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
 			listModel.addElement(doc.getTitle());
+			chat(new Doc("/SYSTEM", " Class added".getBytes()));
 		} else {
 		chat(new Doc("/SYSTEM", ": Class already exists".getBytes()));
 		}
@@ -282,7 +293,12 @@ public class ProjectGUI {
 
 	/**receives the Document doc from Server*/
 	public void receiveDoc(Doc doc) {
-		classes.get(doc.getTitle()).setnewContent(doc.getContent());
+		if(classes.containsKey(doc.getTitle())){
+			classes.get(doc.getTitle()).setnewContent(doc.getContent());
+		} else {
+			addNewClass(doc);
+		}
+		chat(new Doc("/SYSTEM", ("New submit in: " + doc.getTitle()).getBytes()));
 	}
 	public void refreshDoc(){
 		String classTitle = getSelectedClass();

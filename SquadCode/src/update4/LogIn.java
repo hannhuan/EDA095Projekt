@@ -162,7 +162,7 @@ public class LogIn {
 					ObjectOutputStream oos = new ObjectOutputStream(clientsocket.getOutputStream());
 					ObjectInputStream ois = new ObjectInputStream(clientsocket.getInputStream());
 					
-					ProjectGUI proj = new ProjectGUI(oos,username, new HashMap<String, Doc>());
+					ProjectGUI proj = new ProjectGUI(oos, username, new HashMap<String, Doc>());
 					ServerListenerP listener = new ServerListenerP(ois, proj);
 					listener.start();
 					frame.setVisible(false);
