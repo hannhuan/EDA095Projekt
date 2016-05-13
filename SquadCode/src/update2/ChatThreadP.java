@@ -14,10 +14,10 @@ public class ChatThreadP extends Thread {
 	private Socket socketclient;
 	private PrintWriter out;
 	private BufferedReader in;
-	private ClientManagerP manager;
+	private ClientManager manager;
 	private String threadName;
 
-	public ChatThreadP(Socket socketclient, ClientManagerP manager) throws IOException {
+	public ChatThreadP(Socket socketclient, ClientManager manager) throws IOException {
 		this.socketclient = socketclient;
 		this.manager = manager;
 		this.out = new PrintWriter(socketclient.getOutputStream(), true);

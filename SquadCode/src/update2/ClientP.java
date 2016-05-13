@@ -29,7 +29,7 @@ public class ClientP {
 		BufferedReader streamIn = new BufferedReader(new InputStreamReader(System.in));
 		
 		gui = new ProjectGUI(out);
-		ServerListenerP listener = new ServerListenerP(in, gui);
+		ServerListener listener = new ServerListener(in, gui);
 		listener.start();
 		String line;
 		

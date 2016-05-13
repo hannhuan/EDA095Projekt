@@ -28,6 +28,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.text.DefaultCaret;
+
+import ClientSide.ServerManager;
 import Util.Doc;
 import Util.Paket;
 import javax.swing.JList;
@@ -52,9 +54,7 @@ import javax.swing.JTextPane;
 import javax.swing.JTextField;
 
 public class ProjectGUI {
-	private ObjectOutputStream oos;
-	private String username;
-	private Map<String, Doc> classes;
+	private ServerManager manager;
 	private JFrame frame;
 	private FlowLayout flowLayout;
 	private SpringLayout layout;
@@ -75,10 +75,8 @@ public class ProjectGUI {
 	private JButton btnRemoveClass;
 
 	/** CONSTRUCTOR: Creates the ProjectGUI */
-	public ProjectGUI(ObjectOutputStream oos, String username, HashMap<String, Doc> classes) throws IOException {
-		this.oos = oos;
-		this.username = username;
-		this.classes = classes;
+	public ProjectGUI(ServerManager manager) throws IOException {
+		this.manager = manager;
 
 		frame = new JFrame();
 		frame.setBounds(0, 0, 900, 500);
@@ -106,7 +104,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.EAST, btnRefresh, -280, SpringLayout.EAST, mainPanel);
 		btnRefresh.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		layout.putConstraint(SpringLayout.WEST, btnRefresh, 319, SpringLayout.EAST, btnRefresh);
-		btnRefresh.addActionListener(new RefreshListner(this));
+		btnRefresh.addActionListener(new RefreshListener(this, manager));
 		menuPanel.add(btnRefresh);
 
 		btnSubmit = new JButton("SUBMIT");
@@ -114,7 +112,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.WEST, btnSubmit, 131, SpringLayout.WEST, mainPanel);
 		btnSubmit.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
 		btnSubmit.setBackground(new Color(144, 238, 144));
-		btnSubmit.addActionListener(new SubmitListner(this, oos));
+		btnSubmit.addActionListener(new SubmitListener(this, manager));
 		menuPanel.add(btnSubmit);
 
 		btnFormat = new JButton("FORMAT");
@@ -123,7 +121,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.EAST, btnFormat, -432, SpringLayout.EAST, mainPanel);
 		btnFormat.setBackground(new Color(238, 130, 238));
 		btnFormat.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
-		btnFormat.addActionListener(new FormatListner(this));
+		btnFormat.addActionListener(new FormatListener(this));
 		menuPanel.add(btnFormat);
 
 		btnNewClass = new JButton("NEW CLASS");
@@ -133,7 +131,7 @@ public class ProjectGUI {
 		btnNewClass.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		btnNewClass.setBackground(new Color(255, 255, 255));
 		btnNewClass.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		btnNewClass.addActionListener(new NewClassListener(oos, classes));
+		btnNewClass.addActionListener(new NewClassListener(this, manager));
 		mainPanel.add(btnNewClass);
 
 		listModel = new DefaultListModel<String>();
@@ -143,7 +141,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.EAST, projectList, 300, SpringLayout.WEST, mainPanel);
 		projectList.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 22));
 		projectList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		projectList.addListSelectionListener(new SelectListener(this, classes));
+		projectList.addListSelectionListener(new SelectListener(this, manager));
 		mainPanel.add(projectList);
 
 		codeArea = new JTextArea();
@@ -170,7 +168,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.SOUTH, writeMessage, -10, SpringLayout.SOUTH, mainPanel);
 		writeMessage.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		writeMessage.setFont(new Font("Calibri", Font.PLAIN, 20));
-		writeMessage.addActionListener(new SendChatListener(this));
+		writeMessage.addActionListener(new SendChatListener(this, manager));
 		mainPanel.add(writeMessage);
 
 		chatArea = new JTextArea();
@@ -201,26 +199,18 @@ public class ProjectGUI {
 		btnRemoveClass.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		btnRemoveClass.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		btnRemoveClass.setBackground(Color.WHITE);
-		btnRemoveClass.addActionListener(new RemoveClassListener(this, oos));
+		btnRemoveClass.addActionListener(new RemoveClassListener(this, manager));
 		mainPanel.add(btnRemoveClass);
 
 		fillList();
 		frame.setVisible(true);
 	
-		serverSendChat();
+		manager.serverWelcomeChat();
 	}
 
 	/** Fills the CodeArea with the specific text codeText */
 	public void setCodeText(String codeText) {
 		codeArea.setText(codeText);
-	}
-
-	/** Edits the CodeArea */
-	public void editCode() {
-		String newCode = codeArea.getText();
-		String title = projectList.getSelectedValue().toString();
-		classes.put(title, new Doc(title, newCode.getBytes()));
-		codeArea.setText(newCode);
 	}
 
 	/** Adds a line to the chatArea */
@@ -229,29 +219,18 @@ public class ProjectGUI {
 			chatArea.append(doc.getTitle() + ": " + new String(doc.getContent(), "UTF-8") + "\n");
 		} catch (UnsupportedEncodingException e) {}
 	}
+	
+	public String getChatMsg(){
+		String tmp = writeMessage.getText().toString();
+		writeMessage.setText("");
+		return tmp;
+	}
 
 	/** Fills the projectList with all the classes in from this lobby */
 	public void fillList() {
 		listModel.clear();
-		for (String classTitle : classes.keySet()) {
+		for (String classTitle : manager.getKeySet()) {
 			listModel.addElement(classTitle);
-		}
-	}
-
-	/** Sends a chatMessage */
-	public void sendChat() {
-		try {
-			oos.writeObject(new Paket("chat", new Doc(username, writeMessage.getText().getBytes())));
-			writeMessage.setText("");
-		} catch (Exception e) {
-		}
-	}
-	
-	public void serverSendChat(){
-		try {
-			oos.writeObject(new Paket("chat", new Doc("/SERVER", (" User " + username + " connected").getBytes())));
-			writeMessage.setText("");
-		} catch (Exception e) {
 		}
 	}
 
@@ -272,54 +251,13 @@ public class ProjectGUI {
 		return codeArea.getText();
 	}
 
-	/** Adds a new class to the projectList */
-	public void addNewClass(Doc doc) {
-		if(!(classes.containsKey(doc.getTitle()))){
-			classes.put(doc.getTitle(), new Doc(doc.getTitle(), "".getBytes()));
-			listModel.addElement(doc.getTitle());
-			chat(new Doc("/SYSTEM", " Class added".getBytes()));
-		} else {
-		chat(new Doc("/SYSTEM", ": Class already exists".getBytes()));
-		}
+	public void addNewClass(String classTitle) {
+		listModel.addElement(classTitle);
 	}
-
-	/** Removes the selected class from the projectList */
-	public void removeClass(Doc doc) {
-		classes.remove(doc.getTitle());
+	
+	public void removeClass(String classTitle){
+		listModel.removeElement(classTitle);
 		setCodeText("");
 		fillList();
-	}
-
-	/**receives the Document doc from Server*/
-	public void receiveDoc(Doc doc) {
-		if(classes.containsKey(doc.getTitle())){
-			classes.get(doc.getTitle()).setnewContent(doc.getContent());
-		} else {
-			addNewClass(doc);
-		}
-		chat(new Doc("/SYSTEM", ("New submit in: " + doc.getTitle()).getBytes()));
-	}
-	public void refreshDoc(){
-		String classTitle = getSelectedClass();
-		classes.get(classTitle).refresh();
-		
-		try {
-			//System.out.println(new String(classes.get(classTitle).getContent(), "UTF-8"));
-			setCodeText(new String(classes.get(classTitle).getContent(), "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public boolean allowedToSubmit(){
-		return classes.get(getSelectedClass()).ifNewest();
-	}
-	
-	public void saveSubmit(){
-		if(allowedToSubmit()){
-		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
-		classes.get(getSelectedClass()).refresh();		
-		}
 	}
 }

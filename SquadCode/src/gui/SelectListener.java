@@ -5,14 +5,15 @@ import java.util.HashMap;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ClientSide.ServerManager;
 import Util.Doc;
 
 public class SelectListener implements ListSelectionListener {
 	private ProjectGUI gui;
-	private HashMap<String, Doc> classes;
+	private ServerManager sm;
 
-	public SelectListener(ProjectGUI gui, HashMap<String, Doc> classes2) {
-		this.classes = classes2;
+	public SelectListener(ProjectGUI gui, ServerManager sm) {
+		this.sm = sm;
 		this.gui = gui;
 	}
 
@@ -20,12 +21,7 @@ public class SelectListener implements ListSelectionListener {
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (!arg0.getValueIsAdjusting()) {
 			try {
-				//String newcode = "";
-//				if (!gui.getIndexZero()) {
-//					newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
-//					gui.setIndexZeroFalse();
-//				}
-				String newcode = new String(classes.get(gui.getSelectedClass()).getContent(), "UTF-8");
+				String newcode = new String(sm.getClass(gui.getSelectedClass()).getContent(), "UTF-8");
 				gui.setCodeText(newcode);
 				
 			} catch (Exception e) {

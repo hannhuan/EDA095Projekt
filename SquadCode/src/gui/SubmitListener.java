@@ -5,33 +5,32 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
+import ClientSide.ServerManager;
 import Util.Doc;
 import Util.Paket;
 
 
-public class SubmitListner implements ActionListener {
+public class SubmitListener implements ActionListener {
 	private ProjectGUI gui;
-	private ObjectOutputStream oos;
-
-	public SubmitListner(ProjectGUI gui, ObjectOutputStream oos) {
+	private ServerManager sm;
+	
+	public SubmitListener(ProjectGUI gui, ServerManager sm) {
 		this.gui = gui;
-		this.oos = oos;
+		this.sm = sm;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			gui.saveSubmit();
+			sm.saveSubmit(gui.getSelectedClass(), gui.getCodeText());
 			
-			if(gui.allowedToSubmit()){
-				oos.writeObject(new Paket("submit", new Doc(gui.getSelectedClass(), gui.getCodeText().getBytes())));
+			if(sm.allowedToSubmit(gui.getSelectedClass())){
+				sm.sendPaket(new Paket("submit", new Doc(gui.getSelectedClass(), gui.getCodeText().getBytes())));
 			} else {
 				gui.chat(new Doc("/SYSTEM", ": Cant submit while having received code!".getBytes()));
 			}
 			
-		} catch (IOException e1) {}
-		//System.out.println("222222222222222222222");
-		//gui.refreshDoc();
+		} catch (Exception e1) {}
 	}
 
 }

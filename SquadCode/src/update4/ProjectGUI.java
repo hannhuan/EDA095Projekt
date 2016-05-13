@@ -294,7 +294,7 @@ public class ProjectGUI {
 	/**receives the Document doc from Server*/
 	public void receiveDoc(Doc doc) {
 		if(classes.containsKey(doc.getTitle())){
-			classes.get(doc.getTitle()).setnewContent(doc.getContent());
+			classes.get(doc.getTitle()).setNewContent(doc.getContent());
 		} else {
 			addNewClass(doc);
 		}
@@ -319,7 +319,7 @@ public class ProjectGUI {
 	
 	public void saveSubmit(){
 		if(allowedToSubmit()){
-		classes.get(getSelectedClass()).setnewContent(getCodeText().getBytes());
+		classes.get(getSelectedClass()).setNewContent(getCodeText().getBytes());
 		classes.get(getSelectedClass()).refresh();		
 		}
 	}

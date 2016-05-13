@@ -27,7 +27,7 @@ public class Doc implements Serializable{
 			return newest;
 		}
 		
-		public void setnewContent(byte[] newContent){	
+		public void setNewContent(byte[] newContent){	
 			if(!(Arrays.equals(content, newContent))){
 				this.newContent = newContent;
 				this.newest = false;

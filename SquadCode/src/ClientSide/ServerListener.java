@@ -7,15 +7,18 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 
 import Util.Paket;
+import gui.ProjectGUI;
 
 
-public class ServerListenerP extends Thread {
+public class ServerListener extends Thread {
 	private ObjectInputStream ois;
 	private ProjectGUI start;
+	private ServerManager sm;
 
-	public ServerListenerP(ObjectInputStream ois, ProjectGUI start) {
+	public ServerListener(ObjectInputStream ois, ServerManager sm, ProjectGUI start) {
 		this.ois = ois;
 		this.start = start;
+		this.sm = sm;
 	}
 
 
@@ -27,23 +30,17 @@ public class ServerListenerP extends Thread {
 				while(true) {
 					Paket pac = (Paket) ois.readObject();
 					type = pac.getType();
-//						if(line.startsWith("?")){
-//							start.fillList(line.substring(1));
-//						}else if(line.startsWith("$1")){
-//							String classname = line.substring(2, line.indexOf("%"));
-//							String codetext = line.substring(line.indexOf("%")+1);
-//							start.loadProject(classname, codetext);
-//						}else if(line.startsWith("$*")){
-//							start.setProject();
-//						}
 						if(type.equals("chat")){
 							start.chat(pac.getDoc());
 						}else if(type.equals("newclass")){
-							start.addNewClass(pac.getDoc());
+							if(sm.addNewClass(pac.getDoc())){
+								start.addNewClass(pac.getDoc().getTitle());
+							}
 						}else if(type.startsWith("removeclass")){
-							start.removeClass(pac.getDoc());
+							sm.removeClass(pac.getDoc());
+							start.removeClass(pac.getDoc().getTitle());
 						}else if (type.equals("submit")){
-							start.receiveDoc(pac.getDoc());
+							sm.receiveDoc(pac.getDoc());
 						}
 				}
 			} catch (Exception e) {

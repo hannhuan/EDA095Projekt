@@ -84,7 +84,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.EAST, btnRefresh, -280, SpringLayout.EAST, mainPanel);
 		btnRefresh.setFont(new Font("Segoe UI Semibold", Font.BOLD, 35));
 		layout.putConstraint(SpringLayout.WEST, btnRefresh, 319, SpringLayout.EAST, btnRefresh);
-		btnRefresh.addActionListener(new RefreshListner(this));
+		btnRefresh.addActionListener(new RefreshListener(this));
 		
 		btnSubmit = new JButton("SUBMIT");
 		menuPanel.add(btnSubmit);
@@ -92,7 +92,7 @@ public class ProjectGUI {
 		layout.putConstraint(SpringLayout.NORTH, btnSubmit, 10, SpringLayout.NORTH, mainPanel);
 		btnSubmit.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
 		layout.putConstraint(SpringLayout.WEST, btnSubmit, 131, SpringLayout.WEST, mainPanel);
-		btnSubmit.addActionListener(new SubmitListner(this));
+		btnSubmit.addActionListener(new SubmitListener(this));
 
 		btnFormat = new JButton("FORMAT");
 		btnFormat.setBackground(new Color(238, 130, 238));
@@ -101,7 +101,7 @@ public class ProjectGUI {
 		btnFormat.setFont(new Font("Segoe UI Semibold", Font.BOLD, 34));
 		layout.putConstraint(SpringLayout.WEST, btnFormat, 302, SpringLayout.WEST, mainPanel);
 		layout.putConstraint(SpringLayout.EAST, btnFormat, -432, SpringLayout.EAST, mainPanel);
-		btnFormat.addActionListener(new FormatListner(this));
+		btnFormat.addActionListener(new FormatListener(this));
 		
 		btnNewClass = new JButton("NEW CLASS");
 		layout.putConstraint(SpringLayout.NORTH, btnNewClass, 11, SpringLayout.SOUTH, menuPanel);

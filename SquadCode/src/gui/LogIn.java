@@ -34,6 +34,10 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.text.DefaultCaret;
+
+import ClientSide.ServerListener;
+import ClientSide.ServerManager;
+
 import javax.swing.JList;
 
 import java.awt.Component;
@@ -161,8 +165,10 @@ public class LogIn {
 					ObjectOutputStream oos = new ObjectOutputStream(clientsocket.getOutputStream());
 					ObjectInputStream ois = new ObjectInputStream(clientsocket.getInputStream());
 					
-					ProjectGUI proj = new ProjectGUI(oos, username, new HashMap<String, Doc>());
-					ServerListenerP listener = new ServerListenerP(ois, proj);
+					ServerManager sm = new ServerManager(oos, username, new HashMap<String, Doc>());
+					
+					ProjectGUI proj = new ProjectGUI(sm);
+					ServerListener listener = new ServerListener(ois, sm, proj);
 					listener.start();
 					frame.setVisible(false);
 				} catch (IOException e) {

@@ -18,7 +18,7 @@ public class ServerP {
 		int port = 30000;
 		ServerSocket serversocket = new ServerSocket(port);
 		System.out.println("Socket Up: " + port);
-		ClientManagerP manager = new ClientManagerP();
+		ClientManager manager = new ClientManager();
 		
 		
 		while (true) {

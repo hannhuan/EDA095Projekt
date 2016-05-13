@@ -8,26 +8,30 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
+import ClientSide.ServerManager;
 import Util.Doc;
 import Util.Paket;
 
 
 public class NewClassListener implements ActionListener {
-	private ObjectOutputStream oos;
-	private HashMap<String, Doc> classes;
+	private ServerManager sm;
+	private ProjectGUI gui;
 
-	public NewClassListener(ObjectOutputStream oos, HashMap<String, Doc> classes2) {
-		this.oos = oos;
-		this.classes = classes2;
+	public NewClassListener(ProjectGUI gui, ServerManager sm) {
+		this.sm = sm;
+		this.gui = gui;
 	}
 
 	/**Creates a String with a new className and send that String to the output*/
 	public void actionPerformed(ActionEvent arg0) {
 		String classTitle = JOptionPane.showInputDialog("Write a name for your new class", null);
-		//oos.println("§+" + classTitle);
 		try {
-			oos.writeObject(new Paket("newclass", new Doc(classTitle, "".getBytes())));
-		} catch (IOException e) {}
+			if(!(sm.getKeySet().contains(classTitle))){
+				sm.sendPaket(new Paket("newclass", new Doc(classTitle, "".getBytes())));
+			} else {
+				gui.chat(new Doc("/SYSTEM", ": Classname already exists".getBytes()));
+			}
+		} catch (Exception e) {}
 	}
 
 }

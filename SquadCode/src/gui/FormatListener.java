@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class FormatListner implements ActionListener {
+public class FormatListener implements ActionListener {
 
-	public FormatListner(ProjectGUI projectGUI) {
+	public FormatListener(ProjectGUI projectGUI) {
 		// TODO Auto-generated constructor stub
 	}
 
