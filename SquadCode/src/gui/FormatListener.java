@@ -3,17 +3,17 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import Util.Doc;
+
 
 public class FormatListener implements ActionListener {
-
-	public FormatListener(ProjectGUI projectGUI) {
-		// TODO Auto-generated constructor stub
+	private ProjectGUI gui;
+	
+	public FormatListener(ProjectGUI gui) {
+		this.gui = gui;
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		gui.chat(new Doc("/SYSTEM", " Feature only available in the premium version".getBytes()));
 	}
-
 }
