@@ -36,11 +36,18 @@ public class ServerListener extends Thread {
 							if(sm.addNewClass(pac.getDoc())){
 								start.addNewClass(pac.getDoc().getTitle());
 							}
-						}else if(type.startsWith("removeclass")){
+						}else if(type.equals("removeclass")){
 							sm.removeClass(pac.getDoc());
 							start.removeClass(pac.getDoc().getTitle());
 						}else if (type.equals("submit")){
-							sm.receiveDoc(pac.getDoc());
+							if(!(sm.getKeySet().contains(pac.getDoc().getTitle()))){
+								start.addNewClass(pac.getDoc().getTitle());
+								sm.addNewClass(pac.getDoc());
+								sm.receiveDoc(pac.getDoc());
+								sm.refreshDoc(pac.getDoc().getTitle());
+							} else {
+								sm.receiveDoc(pac.getDoc());
+							}
 						}
 				}
 			} catch (Exception e) {
