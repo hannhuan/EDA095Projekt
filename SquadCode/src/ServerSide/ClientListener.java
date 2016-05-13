@@ -39,16 +39,16 @@ public class ClientListener extends Thread {
 				}
 				else if(type.equals("submit")){
 					manager.sendToAll(pac);
-					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (": New submit in " + 
+					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (" New submit in " + 
 							pac.getDoc().getTitle()).getBytes())));
 					
 				}else if(type.equals("newclass")){
 					manager.sendToAll(pac);
-					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (": Added " + 
+					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (" Added " + 
 							pac.getDoc().getTitle()).getBytes())));
 				}else if(type.equals("removeclass")){
 					manager.sendToAll(pac);
-					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (": Removed " + 
+					manager.sendToAll(new Paket("chat", new Doc("/SERVER", (" Removed " + 
 							pac.getDoc().getTitle()).getBytes())));
 				}
 			}
